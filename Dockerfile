@@ -6,5 +6,7 @@ COPY requirements.txt requirements.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# make sure keeping /home/aicrowd as WORKDIR !!!
+# DO NOT MODIFY
 WORKDIR /home/aicrowd
+# DO NOT MODIFY
+COPY my-submission my-submission
