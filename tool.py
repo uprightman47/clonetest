@@ -59,6 +59,7 @@ def run_submission_in_docker(submission_path):
                 raise CalledProcessError(r.returncode, r.args, r.stdout,
                                          r.stderr)
         return r.stdout.decode().strip()
+    ok(f"Try build image {IMAGE}:local ...")
     _shell(f"docker build -t {IMAGE}:local -f Dockerfile .", capture_output=False)
     if _shell(f'docker ps -a | grep -w "{CONTAINER}"') != "":
         _shell(f"docker stop {CONTAINER}")
@@ -111,9 +112,11 @@ def rollout(submission_path: str,
 
     if remote:
         if remote == "docker":
+            ok(f"Try run submission in docker container ...")
             container_id = run_submission_in_docker(submission_path)
             ok(f"Submission is running in container {container_id}")
         elif remote == "process":
+            ok(f"Try run submission in subprocess ...")
             p = run_submission_in_process(submission_path)
             ok(f"Submission is running in process {p.pid}")
         else:
@@ -146,12 +149,13 @@ def rollout(submission_path: str,
 
 class Toolkit:
     def test(self,
-             submission: str,
+             submission: str = "my-submission",
              n_episode: int = 1,
              render: bool = False,
              remote: Optional[str] = None):
         from art import text2art
         subm.check(submission)
+        ok(f"Testing {submission} ...")
         try:
             rollout(submission, n_episode, render, remote)
         except:
