@@ -1,4 +1,4 @@
-# IJCAI-2022-NMMO-STARTER-KIT
+# IJCAI2022-NMMO-STARTER-KIT
 
 > This is only a temporary README.
 
