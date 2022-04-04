@@ -1,12 +1,12 @@
 FROM ijcai2022nmmo/submission-runtime:latest
 
-WORKDIR /tmp/install
+WORKDIR /home/nmmo/install
 
-COPY requirements.txt requirements.txt
+COPY --chown=nmmo:nmmo requirements.txt requirements.txt
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --user --no-cache-dir -r requirements.txt
 
 # DO NOT MODIFY
 WORKDIR /home/aicrowd
-# DO NOT MODIFY
-COPY my-submission my-submission
+COPY --chown=nmmo:nmmo my-submission my-submission
+
