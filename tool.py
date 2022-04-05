@@ -60,8 +60,10 @@ def run_submission_in_docker(submission_path):
                 raise CalledProcessError(r.returncode, r.args, r.stdout,
                                          r.stderr)
         return r.stdout.decode().strip()
+
     ok(f"Try build image {IMAGE}:local ...")
-    _shell(f"docker build -t {IMAGE}:local -f Dockerfile .", capture_output=False)
+    _shell(f"docker build -t {IMAGE}:local -f Dockerfile .",
+           capture_output=False)
     if _shell(f'docker ps -a | grep -w "{CONTAINER}"') != "":
         _shell(f"docker stop {CONTAINER}")
         _shell(f"docker rm {CONTAINER}")
@@ -102,8 +104,7 @@ def err(msg: str):
     print(termcolor.colored(msg, "red", attrs=['bold']))
 
 
-def rollout(submission_path: str,
-            remote: Optional[str] = None):
+def rollout(submission_path: str, remote: Optional[str] = None):
     from ijcai2022nmmo import CompetitionConfig
 
     class Config(CompetitionConfig):
@@ -243,8 +244,10 @@ class Toolkit:
             sys.exit(3)
 
         if not config.get("authors"):
-            err(f'[authors] in aicrowd.json should be set as aicrowd username(s). Like ["tomz", "maryz"]')
+            err(f'[authors] in aicrowd.json should be set as aicrowd username(s). Like ["tomz", "maryz"]'
+                )
             sys.exit(4)
+
 
 if __name__ == "__main__":
     import fire
