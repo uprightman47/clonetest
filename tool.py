@@ -103,8 +103,6 @@ def err(msg: str):
 
 
 def rollout(submission_path: str,
-            n_episode: int = 1,
-            render: bool = False,
             remote: Optional[str] = None):
     from ijcai2022nmmo import CompetitionConfig
 
@@ -140,7 +138,7 @@ def rollout(submission_path: str,
             ] + [team],
             True,
         )
-        ro.run(n_episode=n_episode, render=render)
+        ro.run()
     except:
         raise
     finally:
@@ -149,18 +147,20 @@ def rollout(submission_path: str,
 
 
 class Toolkit:
-    def test(self,
-             submission: str = "my-submission",
-             n_episode: int = 1,
-             render: bool = False,
-             remote: Optional[str] = None):
+    def test(self, remote: Optional[str] = None):
         self.check_aicrowd_json()
-        
-        from art import text2art
-        subm.check(submission)
-        ok(f"Testing {submission} ...")
+
+        submission = "my-submission"
         try:
-            rollout(submission, n_episode, render, remote)
+            subm.check(submission)
+        except Exception as e:
+            err(str(e))
+            sys.exit(5)
+        ok(f"Testing {submission} ...")
+
+        from art import text2art
+        try:
+            rollout(submission, remote)
         except:
             traceback.print_exc()
             err(text2art("TEST FAIL", "sub-zero"))
@@ -241,7 +241,7 @@ class Toolkit:
             err(f"[challenge_id] in aicrowd.json should be ijcai-2022-the-neural-mmo-challenge"
                 )
             sys.exit(3)
-        
+
         if not config.get("authors"):
             err(f'[authors] in aicrowd.json should be set as aicrowd username(s). Like ["tomz", "maryz"]')
             sys.exit(4)
