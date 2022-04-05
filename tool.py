@@ -4,6 +4,7 @@
 import os
 import sys
 import time
+import json
 import tempfile
 import traceback
 import termcolor
@@ -153,6 +154,8 @@ class Toolkit:
              n_episode: int = 1,
              render: bool = False,
              remote: Optional[str] = None):
+        self.check_aicrowd_json()
+        
         from art import text2art
         subm.check(submission)
         ok(f"Testing {submission} ...")
@@ -230,6 +233,18 @@ class Toolkit:
             if not fault:
                 ok("Check requirements passed! Good luck!")
 
+    def check_aicrowd_json(self):
+        with open("aicrowd.json", "r") as fp:
+            config: dict = json.load(fp)
+
+        if config.get("challenge_id") != "ijcai-2022-the-neural-mmo-challenge":
+            err(f"[challenge_id] in aicrowd.json should be ijcai-2022-the-neural-mmo-challenge"
+                )
+            sys.exit(3)
+        
+        if not config.get("authors"):
+            err(f'[authors] in aicrowd.json should be set as aicrowd username(s). Like ["tomz", "maryz"]')
+            sys.exit(4)
 
 if __name__ == "__main__":
     import fire
