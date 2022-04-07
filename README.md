@@ -1,27 +1,32 @@
 ![ijcai2022nmmo-banner](https://i.imgur.com/H1gHKBm.png)
 
+[IMPORTANT - Accept the rules before you submit](https://www.aicrowd.com/challenges/the-neural-mmo-challenge/challenge_rules)
+
 # Table of contents
-- [📚 Competition procedure](#competition-procedure)
-- [💪 Installation](#installation)
-- [🛠 Preparing your submission](#preparing-your-submission)
-  * [Write your agents](#1-write-your-agent)
-  * [Create submission](#2-create-submission)
-  * [validate locally before submit](#3-validate-locally-before-submit)
-- [📨 Submission](#submission)
+- [Competition procedure](#competition-procedure)
+- [Installation](#installation)
+- [Baselines](#baselines)
+- [Preparing your submission](#preparing-your-submission)
+  * [Create submission](#1-create-submission)
+  * [validate locally before submit](#2-validate-locally-before-submit)
+- [Submission](#submission)
   * [Repository Structure](#repository-structure)
   * [Runtime configuration](#runtime-configuration)
-  * [🚀 Submitting to AIcrowd](#submitting-to-aicrowd)
+  * [Submitting to AIcrowd](#submitting-to-aicrowd)
     + [`aicrowd.json`](#aicrowdjson)
     + [Configuring the submission repository](#configuring-the-submission-repository)
     + [Pushing the code to AIcrowd](#pushing-the-code-to-aicrowd)
-- [📝 Submission checklist](#submission-checklist)
-- [📎 Important links](#important-links)
-- [✨ Contributors](#contributors)
+- [Submission checklist](#submission-checklist)
+- [Important links](#important-links)
+- [Contributors](#contributors)
 
 
 # Competition procedure
+
 The Neural MMO Challenge is an opportunity for researchers and machine learning enthusiasts to test their skills by designing and building agents that can survive and thrive in a massively multiagent environment full of potential adversaries.
+
 In this challenge, you will train your models locally and then upload them to AIcrowd (via git) to be evaluated.
+
 **The following is a high level description of how this process works.**
 
 ![WIP]()
@@ -32,7 +37,7 @@ In this challenge, you will train your models locally and then upload them to AI
 4. [**Submit**](#-submission) your agents to [AIcrowd Gitlab](https://gitlab.aicrowd.com) for evaluation. [Refer this for detailed instructions](#submission).
 
 
-# 💪 Installation
+# Installation
 
 > We recommend using `python 3.9`. If you are using Miniconda/Anaconda, you can install it using `conda install python=3.9`.
 
@@ -40,26 +45,25 @@ In this challenge, you will train your models locally and then upload them to AI
 Clone the starter kit repository and install the dependencies.
 
 ```bash
-# See https://github.com/IJCAI2022-NMMO/ijcai2022nmmo#installation.
-$ pip install xxx
+$ pip install nmmo==1.5.3.17a1
+$ pip install git+https://github.com/IJCAI2022-NMMO/ijcai2022nmmo.git
 $ pip install -r requirements.txt
 ```
 
+# Baselines
+
+We provide a variety of baseline agents, please refer to [ijcai2022-nmmo-baselines](https://gitlab.aicrowd.com/neural-mmo/ijcai2022-nmmo-baselines) repository.
 
 # Preparing your submission
-
-### 1. write your agent
-We provide a variety of baselines agent, please refer to [`ijcai2022-nmmo-baselines`](https://gitlab.aicrowd.com/neural-mmo/ijcai2022-nmmo-baselines) repository.
-
-### 2. create submission
+### 1. create submission
 
 The submission entrypoint is a python script `my-submission/submission.py`, that runs in an environment defined by `Dockerfile`.
 
-You need to copy all your necessary code to `my-submission/` directory**, and replace `submission.py` with you own implementation, which must inherit the [`Team`]() class and have [`act`]() method implemented. An example is provided in `my-submission/submission.py` for your reference.
+You need to copy all your necessary code to `my-submission/` directory, and replace `submission.py` with you own implementation, which must inherit the [`Team`]() class and have [`act`]() method implemented. An example is provided in `my-submission/submission.py` for your reference.
 
-**Note:** If your agent doesn't inherit the `Team` class, the evaluation will fail.
+**Note:** If your agent doesn't inherit the `Team` class, the evaluation will fail. For more information about `Team`, please refer to [ijcai2022nmmo Team](https://github.com/IJCAI2022-NMMO/ijcai2022nmmo#team).
 
-### 3. validate locally before submit
+### 2. validate locally before submit
 
 We have provided `tool.py` to validate your submission locally. This file will execute your submission in the same way as the actual evaluation.
 
@@ -69,29 +73,36 @@ To run the validation locally, run the following command.
 $ python tool.py test --submission=my-submission --remote=docker
 ```
 
-Make sure you see such log below.
+If docker is not installed in your machine, you can alternatively execute local validation by running you submission as a background process. 
+
+```bash
+$ python tool.py test --submission=my-submission --remote=process
 ```
-xxxxxxxxxxxxxxxxxxxx test pass
+We recommend you use `--remote=docker` for local validation, which is the mode used in competition server.
+
+Before submit, make sure you see such log below.
+``` 
+WIP
 ```
 
-# 📨 Submission
+# Submission
 
 ## Repository Structure
 
 **File/Directory** | **Description**
 --- | ---
 [`my-submission/`](my-submission/) | Directory containing your submission.
-[`submission-runtime/`](submission-runtime/) | Directory containing the default dockerfile and requirements.txt. Don't change!
+[`submission-runtime/`](submission-runtime/) | Directory containing the default Dockerfile and requirements.txt. Don't change it.
 [`submit.sh`](submit.sh) | Helper script to submit your repository to [AIcrowd GitLab](https://gitlab.aicrowd.com).
 [`Dockerfile`](Dockerfile) | Docker config for your submission. 
 [`requirements.txt`](requirements.txt) | File containing the list of python packages you want to install for the submission to run.
-[`tool.py`](tool.py) | Hepler script to validate your submission locally. Refer[`validate locally before submit`](#3-validate-locally-before-submit) for more information.
+[`tool.py`](tool.py) | Hepler script to validate your submission locally. Refer [validate locally before submit](#2-validate-locally-before-submit) for more information.
 
 ## Runtime configuration
-The default runtime is provided in `submission-runtime`. We also accept submissions with custom runtimes, so you can choose your favorite. The configuration files include `requirements.txt` file and `Dockerfile`.
+The default runtime is provided in `submission-runtime/`. We also accept submissions with custom runtimes, so you can choose your favorite. The configuration files include `requirements.txt` file and `Dockerfile`.
 
 
-## 🚀 Submitting to AIcrowd
+## Submitting to AIcrowd
 
 ### **Add your SSH key** to AIcrowd GitLab
 
@@ -104,7 +115,7 @@ Your repository should have an `aicrowd.json` file with following fields:
 
 ```json
 {
-    "challenge_id" : "the-neural-mmo-challenge",
+    "challenge_id" : "ijcai-2022-the-neural-mmo-challenge",
     "authors" : ["Your Name"],
     "description" : "Brief description for your submission"
 }
@@ -115,7 +126,7 @@ This file is used to identify your submission as a part of the Neural MMO Challe
 ### Configuring the submission repository
 
 ```bash
-git remote add aicrowd git@gitlab.aicrowd.com:<username>/neural-mmo-starter-kit.git
+git remote add aicrowd git@gitlab.aicrowd.com:<username>/ijcai2022-nmmo-starter-kit.git
 ```
 
 **Note:** This needs to be done only once. This configuration will be saved in your repository for future use.
@@ -126,29 +137,29 @@ git remote add aicrowd git@gitlab.aicrowd.com:<username>/neural-mmo-starter-kit.
 ./submit.sh "some description"
 ```
 
-# 📝 Submission checklist
+# Submission checklist
 
-- [x] **Accept the challenge rules**. You can do this by going to the [challenge overview page]() and clicking the "Participate" button. You only need to do this once.
+- [x] **Accept the challenge rules**. You can do this by going to the [challenge overview page](https://www.aicrowd.com/challenges/ijcai-2022-the-neural-mmo-challenge) and clicking the "Participate" button. You only need to do this once.
 - [x] **Create your own submission**. The `submit.sh` will automatically detect large files and add them to git LFS. If you are using the script, please refer to [this post explaining how to add your models](https://discourse.aicrowd.com/t/how-to-upload-large-files-size-to-your-submission/2304).
 - [x] **Validate your submission locally** to know that they work as expected. 
 - [x] **Update runtime configuration** using `requirements.txt`, and/or `Dockerfile` as necessary. Please make sure that you specified the same package versions that you use locally on your machine.
 
-# 📎 Important links
+# Important links
 
-- 💪 Challenge information
+- Challenge information
    * [Challenge page](https://www.aicrowd.com/challenges/ijcai-2022-the-neural-mmo-challenge)
    * [Leaderboard](https://www.aicrowd.com/challenges/ijcai-2022-the-neural-mmo-challenge/leaderboards)
- - 🗣 Community
+ - Community
     * [Neural MMO discord server](https://discord.gg/neX6e4Kc)
     * [Challenge discussion forum](https://www.aicrowd.com/challenges/ijcai-2022-the-neural-mmo-challenge/discussion)
-- 🎮 Neural MMO resources
+- Neural MMO resources
     * [Neural MMO documentation](https://neuralmmo.github.io/build/html/rst/landing.html)
     * [Neural MMO GitHub repository](https://github.com/NeuralMMO/environment/tree/ijcai-competition)
     * [Neural MMO tutorial](https://colab.research.google.com/drive/1NUXIDmV5pOHFmAMGztizvuOkjr8W5Bat)
     
 
-# ✨ Contributors
+# Contributors
 
 - [WIP](xxx)
 
-**Best of Luck** 🎉 
+**Best of Luck** 
