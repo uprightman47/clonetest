@@ -1,4 +1,4 @@
-![ijcai2022nmmo-banner](https://i.imgur.com/H1gHKBm.png)
+![ijcai2022nmmo-banner](banner.jpg)
 
 [IMPORTANT - Accept the rules before you submit](wip)
 
@@ -29,7 +29,7 @@ In this challenge, you will train your models locally and then upload them to AI
 
 **The following is a high level description of how this process works.**
 
-![procedure](https://i.imgur.com/ak52KPp.png)
+![WIP](./UserFlow.png)
 
 1. **Sign up** to join the competition [on the AIcrowd website](https://www.aicrowd.com/challenges/ijcai-2022-the-neural-mmo-challenge).
 2. **Clone** this repo and start developing your solution.
