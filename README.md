@@ -148,6 +148,20 @@ Then you can check your submission's status through [AIcrowd Submission](wip), i
 - [x] **Validate your submission locally** to know that they work as expected. 
 - [x] **Update runtime configuration** using `requirements.txt`, and/or `Dockerfile` as necessary. Please make sure that you specified the same package versions that you use locally on your machine.
 
+# FAQ
+
+#### 1. How can I render/save replay locally?
+
+Please refer to [Neural MMO tutorial - Replay](https://colab.research.google.com/drive/1NUXIDmV5pOHFmAMGztizvuOkjr8W5Bat) for an instruction about how to rendering locally.
+
+#### 2. Are there any hardware or time constraints?
+
+During evaluation, your submission will be allocated with **1 CPU core and 1G memory**. Each step, your agent must give decision within **600ms**.
+
+#### 3. Are there any file size limit for submission?
+
+Your submission should not be larger than 13Gi.
+
 # Important links
 
 - Challenge information
@@ -168,11 +182,5 @@ Then you can check your submission's status through [AIcrowd Submission](wip), i
 - AIcrowd
 
 
-# FAQ
 
-#### 1. How can I render/save replay locally?
-
-Please refer to [Neural MMO tutorial - Replay](https://colab.research.google.com/drive/1NUXIDmV5pOHFmAMGztizvuOkjr8W5Bat) for an instruction about how to rendering locally.
-
-#### 2. Are there any hardware or time constraints?
 
