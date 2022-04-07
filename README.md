@@ -1,6 +1,6 @@
 ![ijcai2022nmmo-banner](https://i.imgur.com/H1gHKBm.png)
 
-[IMPORTANT - Accept the rules before you submit](https://www.aicrowd.com/challenges/the-neural-mmo-challenge/challenge_rules)
+[IMPORTANT - Accept the rules before you submit](wip)
 
 # Table of contents
 - [Competition procedure](#competition-procedure)
@@ -29,7 +29,7 @@ In this challenge, you will train your models locally and then upload them to AI
 
 **The following is a high level description of how this process works.**
 
-![WIP]()
+![procedure](https://i.imgur.com/ak52KPp.png)
 
 1. **Sign up** to join the competition [on the AIcrowd website](https://www.aicrowd.com/challenges/ijcai-2022-the-neural-mmo-challenge).
 2. **Clone** this repo and start developing your solution.
@@ -45,9 +45,8 @@ In this challenge, you will train your models locally and then upload them to AI
 Clone the starter kit repository and install the dependencies.
 
 ```bash
-$ pip install nmmo==1.5.3.17a1
-$ pip install git+https://github.com/IJCAI2022-NMMO/ijcai2022nmmo.git
-$ pip install -r requirements.txt
+pip install git+https://github.com/IJCAI2022-NMMO/ijcai2022nmmo.git
+pip install -r requirements.txt
 ```
 
 # Baselines
@@ -70,19 +69,23 @@ We have provided `tool.py` to validate your submission locally. This file will e
 To run the validation locally, run the following command.
 
 ```bash
-$ python tool.py test --submission=my-submission --remote=docker
+python tool.py test --remote=docker
 ```
 
 If docker is not installed in your machine, you can alternatively execute local validation by running you submission as a background process. 
 
 ```bash
-$ python tool.py test --submission=my-submission --remote=process
+python tool.py test --remote=process
 ```
 We recommend you use `--remote=docker` for local validation, which is the mode used in competition server.
 
-Before submit, make sure you see such log below.
-``` 
-WIP
+Before submit, make sure you see "TEST PASS" as below.
+```
+______   ______     ______     ______      ______   ______     ______     ______    
+/\__  _\ /\  ___\   /\  ___\   /\__  _\    /\  == \ /\  __ \   /\  ___\   /\  ___\   
+\/_/\ \/ \ \  __\   \ \___  \  \/_/\ \/    \ \  _-/ \ \  __ \  \ \___  \  \ \___  \  
+   \ \_\  \ \_____\  \/\_____\    \ \_\     \ \_\    \ \_\ \_\  \/\_____\  \/\_____\ 
+    \/_/   \/_____/   \/_____/     \/_/      \/_/     \/_/\/_/   \/_____/   \/_____/
 ```
 
 # Submission
@@ -136,6 +139,7 @@ git remote add aicrowd git@gitlab.aicrowd.com:<username>/ijcai2022-nmmo-starter-
 ```bash
 ./submit.sh "some description"
 ```
+Then you can check your submission's status through [AIcrowd Submission](wip), if success, you would see your rank in [Leaderboard](wip) soon.
 
 # Submission checklist
 
@@ -159,7 +163,16 @@ git remote add aicrowd git@gitlab.aicrowd.com:<username>/ijcai2022-nmmo-starter-
     
 
 # Contributors
+- Parametrix.ai
+- Joseph Suarez
+- AIcrowd
 
-- [WIP](xxx)
 
-**Best of Luck** 
+# FAQ
+
+#### 1. How can I render/save replay locally?
+
+Please refer to [Neural MMO tutorial - Replay](https://colab.research.google.com/drive/1NUXIDmV5pOHFmAMGztizvuOkjr8W5Bat) for an instruction about how to rendering locally.
+
+#### 2. Are there any hardware or time constraints?
+
