@@ -1,2 +1,2 @@
-https://github.com/IJCAI2022-NMMO/environment/archive/refs/tags/ijcai2022-0403.tar.gz
-https://github.com/IJCAI2022-NMMO/ijcai2022nmmo/archive/refs/tags/v0.2.0.tar.gz
+https://files.pythonhosted.org/packages/df/0b/94f5063471215ae1bd502a39eca0fc03ee37a07f4902dc4c43ddcab4ca86/nmmo-1.5.3.17a1.tar.gz
+https://github.com/IJCAI2022-NMMO/ijcai2022nmmo/archive/refs/tags/v0.2.1.tar.gz
