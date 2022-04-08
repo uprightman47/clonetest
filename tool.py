@@ -20,6 +20,7 @@ from ijcai2022nmmo import submission as subm
 IMAGE = "ijcai2022nmmo/submission-runtime"
 CONTAINER = "ijcai2022-nmmo-runner"
 PORT = 12343
+TENCENTCLOUD_REGISTRY = "ccr.ccs.tencentyun.com"
 
 
 def run_team_server(submission_path: str):
@@ -42,7 +43,12 @@ def run_submission_in_process(submission_path) -> mp.Process:
     return p
 
 
-def run_submission_in_docker(submission_path):
+def run_submission_in_docker(submission_path, registry):
+    if registry not in ["dockerhub", "tencentcloud"]:
+        err(f"Invalid registry {registry}")
+        sys.exit(6)
+    ok(f"Use docker registry [{registry}]")
+
     need_root = True if os.system("docker ps 1>/dev/null 2>&1") else False
 
     def _shell(command, capture_output=True, print_command=True):
@@ -61,9 +67,39 @@ def run_submission_in_docker(submission_path):
                                          r.stderr)
         return r.stdout.decode().strip()
 
+    # check if should pull manually
+    manual_pull = False
+    if registry != "dockerhub":
+        with open("Dockerfile", "r") as fp:
+            lines = fp.readlines()
+            for line in lines:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                if line.startswith(
+                        "FROM") and line.split()[-1] == f"{IMAGE}:latest":
+                    manual_pull = True
+                    break
+
+    if manual_pull:
+        if registry == "tencentcloud":
+            ok(f"Try pull image from {TENCENTCLOUD_REGISTRY}")
+            _shell(f"docker pull {TENCENTCLOUD_REGISTRY}/{IMAGE}:latest",
+                   capture_output=False)
+            _shell(
+                f"docker tag {TENCENTCLOUD_REGISTRY}/{IMAGE}:latest {IMAGE}:latest",
+                capture_output=False)
+            manual_pull = True
+        else:
+            assert 0, f"Invalid registry {registry}"
+
     ok(f"Try build image {IMAGE}:local ...")
-    _shell(f"docker build --pull -t {IMAGE}:local -f Dockerfile .",
-           capture_output=False)
+    if manual_pull:
+        _shell(f"docker build -t {IMAGE}:local -f Dockerfile .",
+               capture_output=False)
+    else:
+        _shell(f"docker build --pull -t {IMAGE}:local -f Dockerfile .",
+               capture_output=False)
     if _shell(f'docker ps -a | grep -w "{CONTAINER}"') != "":
         _shell(f"docker stop {CONTAINER}")
         _shell(f"docker rm {CONTAINER}")
@@ -104,7 +140,7 @@ def err(msg: str):
     print(termcolor.colored(msg, "red", attrs=['bold']))
 
 
-def rollout(submission_path: str, remote: Optional[str] = None):
+def rollout(submission_path: str, remote: Optional[str], registry: str):
     from ijcai2022nmmo import CompetitionConfig
 
     class Config(CompetitionConfig):
@@ -113,7 +149,7 @@ def rollout(submission_path: str, remote: Optional[str] = None):
     if remote:
         if remote == "docker":
             ok(f"Try run submission in docker container ...")
-            container_id = run_submission_in_docker(submission_path)
+            container_id = run_submission_in_docker(submission_path, registry)
             ok(f"Submission is running in container {container_id}")
         elif remote == "process":
             ok(f"Try run submission in subprocess ...")
@@ -148,7 +184,11 @@ def rollout(submission_path: str, remote: Optional[str] = None):
 
 
 class Toolkit:
-    def test(self, remote: Optional[str] = None):
+    def test(
+        self,
+        remote: Optional[str] = None,
+        registry: str = "dockerhub",
+    ):
         self.check_aicrowd_json()
 
         submission = "my-submission"
@@ -161,7 +201,7 @@ class Toolkit:
 
         from art import text2art
         try:
-            rollout(submission, remote)
+            rollout(submission, remote, registry)
         except:
             traceback.print_exc()
             err(text2art("TEST FAIL", "sub-zero"))
