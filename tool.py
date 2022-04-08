@@ -62,7 +62,7 @@ def run_submission_in_docker(submission_path):
         return r.stdout.decode().strip()
 
     ok(f"Try build image {IMAGE}:local ...")
-    _shell(f"docker build -t {IMAGE}:local -f Dockerfile .",
+    _shell(f"docker build --pull -t {IMAGE}:local -f Dockerfile .",
            capture_output=False)
     if _shell(f'docker ps -a | grep -w "{CONTAINER}"') != "":
         _shell(f"docker stop {CONTAINER}")
