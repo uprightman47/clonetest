@@ -13,6 +13,3 @@ COPY requirements_nmmo.txt requirements_nmmo.txt
 
 RUN pip install --no-cache-dir -r requirements_nmmo.txt -i ${NMMO_PYPI}
 
-# tmp
-RUN pip install --no-cache-dir supersuit -i ${NMMO_PYPI}
-
