@@ -14,7 +14,6 @@ import multiprocessing as mp
 from subprocess import CalledProcessError
 from typing import List, Optional
 from pathlib import Path
-from aicrowd.contexts.config import CLIConfig
 
 from ijcai2022nmmo import submission as subm
 
@@ -295,6 +294,7 @@ class Toolkit:
             sys.exit(4)
 
     def aicrowd_setup(self):
+        from aicrowd.contexts.config import CLIConfig
         c = CLIConfig()
         c.load(None)
         if not c.get("aicrowd_api_key"):
