@@ -13,5 +13,7 @@ image:
 push: image
 	@docker push ${REPO}:${TAG}
 	@docker push ${REPO}:latest
+	@docker tag ${REPO}:${TAG} ${TENCENTCLOUD_REGISTRY}/${REPO}:${TAG}
+	@docker push ${TENCENTCLOUD_REGISTRY}/${REPO}:${TAG}
 	@docker tag ${REPO}:${TAG} ${TENCENTCLOUD_REGISTRY}/${REPO}:latest
 	@docker push ${TENCENTCLOUD_REGISTRY}/${REPO}:latest
