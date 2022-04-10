@@ -57,7 +57,7 @@ def run_submission_in_docker(submission_path, registry):
         if print_command:
             print(command)
         r = subprocess.run(command, shell=True, capture_output=capture_output)
-        if not capture_output: return
+        if not capture_output: return r.returncode
         if r.returncode != 0:
             # grep return 1 when no lines matching
             if r.returncode == 1 and "grep" in command:
@@ -84,8 +84,10 @@ def run_submission_in_docker(submission_path, registry):
     if manual_pull:
         if registry == "tencentcloud":
             ok(f"Try pull image from {TENCENTCLOUD_REGISTRY}")
-            _shell(f"docker pull {TENCENTCLOUD_REGISTRY}/{IMAGE}:latest",
-                   capture_output=False)
+            if _shell(f"docker pull {TENCENTCLOUD_REGISTRY}/{IMAGE}:latest",
+                   capture_output=False):
+                err(f"Pull image failed.")
+                sys.exit(10)
             _shell(
                 f"docker tag {TENCENTCLOUD_REGISTRY}/{IMAGE}:latest {IMAGE}:latest",
                 capture_output=False)
@@ -95,11 +97,15 @@ def run_submission_in_docker(submission_path, registry):
 
     ok(f"Try build image {IMAGE}:local ...")
     if manual_pull:
-        _shell(f"docker build -t {IMAGE}:local -f Dockerfile .",
-               capture_output=False)
+        if _shell(f"docker build -t {IMAGE}:local -f Dockerfile .",
+               capture_output=False):
+            err("Build failed.")
+            sys.exit(10)
     else:
-        _shell(f"docker build --pull -t {IMAGE}:local -f Dockerfile .",
-               capture_output=False)
+        if _shell(f"docker build --pull -t {IMAGE}:local -f Dockerfile .",
+               capture_output=False):
+            err("Build failed.")
+            sys.exit(10)
     if _shell(f'docker ps -a | grep -w "{CONTAINER}"') != "":
         _shell(f"docker stop {CONTAINER}")
         _shell(f"docker rm {CONTAINER}")
@@ -195,6 +201,7 @@ class Toolkit:
         try:
             subm.check(submission)
         except Exception as e:
+            traceback.print_exc()
             err(str(e))
             sys.exit(5)
         ok(f"Testing {submission} ...")
