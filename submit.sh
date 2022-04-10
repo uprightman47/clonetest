@@ -77,7 +77,7 @@ setup_commits() {
   git tag -am "submission-$TAG" "submission-$TAG" || (log_error "There is another submission with the same description. Please give a different description." && exit 1)
   git push -f $REMOTE main
   git push -f $REMOTE "submission-$TAG"
-  log_success "Check the submission progress in your repository: $(get_submission_remote_url | awk -F'@' '{print $NF}' | sed 's|\.git||g')/issues"
+  log_success "Check the submission progress in your repository: $(get_submission_remote_url | awk -F'@' '{print $NF}' | sed 's|\.git||g' | sed 's|\.com:|\.com/|g')/issues"
 }
 
 check_cli_install() {
@@ -98,9 +98,9 @@ check_cli_install() {
     log_error 'You might be on older AIcrowd CLI version. Please upgrade using `pip install -U aicrowd-cli` and login again.';exit 1
   fi
   export OAUTH=$(python -c 'from aicrowd.contexts.config import CLIConfig;c=CLIConfig();c.load(None);print(c.get("gitlab")["oauth_token"])')
-  git remote add aicrowd https://oauth2:$OAUTH@gitlab.aicrowd.com/$USERNAME/zew-data-purchasing-challenge-2022-starter-kit.git 2> /dev/null
-  git config lfs.https://oauth2:$OAUTH@gitlab.aicrowd.com/$USERNAME/zew-data-purchasing-challenge-2022-starter-kit.git/info/lfs.locksverify true
-  git config lfs.https://gitlab.aicrowd.com/$USERNAME/zew-data-purchasing-challenge-2022-starter-kit.git/info/lfs.locksverify true
+  git remote add aicrowd https://oauth2:$OAUTH@gitlab.aicrowd.com/$USERNAME/ijcai2022-nmmo-starter-kit.git 2> /dev/null
+  git config lfs.https://oauth2:$OAUTH@gitlab.aicrowd.com/$USERNAME/ijcai2022-nmmo-starter-kit.git/info/lfs.locksverify true
+  git config lfs.https://gitlab.aicrowd.com/$USERNAME/ijcai2022-nmmo-starter-kit.git/info/lfs.locksverify true
   retval=$?
   if [ $retval -ne 0 ]; then
     log_normal "Remote already exit, repository location: $(get_submission_remote | awk -F'@' '{print $NF}' | sed 's|\.git||g')";
