@@ -14,6 +14,7 @@ import multiprocessing as mp
 from subprocess import CalledProcessError
 from typing import List, Optional
 from pathlib import Path
+from aicrowd.contexts.config import CLIConfig
 
 from ijcai2022nmmo import submission as subm
 
@@ -85,7 +86,7 @@ def run_submission_in_docker(submission_path, registry):
         if registry == "tencentcloud":
             ok(f"Try pull image from {TENCENTCLOUD_REGISTRY}")
             if _shell(f"docker pull {TENCENTCLOUD_REGISTRY}/{IMAGE}:latest",
-                   capture_output=False):
+                      capture_output=False):
                 err(f"Pull image failed.")
                 sys.exit(10)
             _shell(
@@ -98,12 +99,12 @@ def run_submission_in_docker(submission_path, registry):
     ok(f"Try build image {IMAGE}:local ...")
     if manual_pull:
         if _shell(f"docker build -t {IMAGE}:local -f Dockerfile .",
-               capture_output=False):
+                  capture_output=False):
             err("Build failed.")
             sys.exit(10)
     else:
         if _shell(f"docker build --pull -t {IMAGE}:local -f Dockerfile .",
-               capture_output=False):
+                  capture_output=False):
             err("Build failed.")
             sys.exit(10)
     if _shell(f'docker ps -a | grep -w "{CONTAINER}"') != "":
@@ -146,23 +147,23 @@ def err(msg: str):
     print(termcolor.colored(msg, "red", attrs=['bold']))
 
 
-def rollout(submission_path: str, remote: Optional[str], registry: str):
+def rollout(submission_path: str, startby: Optional[str], registry: str):
     from ijcai2022nmmo import CompetitionConfig
 
     class Config(CompetitionConfig):
         PATH_MAPS = 'maps/medium/evaluation'
 
-    if remote:
-        if remote == "docker":
+    if startby:
+        if startby == "docker":
             ok(f"Try run submission in docker container ...")
             container_id = run_submission_in_docker(submission_path, registry)
             ok(f"Submission is running in container {container_id}")
-        elif remote == "process":
+        elif startby == "process":
             ok(f"Try run submission in subprocess ...")
             p = run_submission_in_process(submission_path)
             ok(f"Submission is running in process {p.pid}")
         else:
-            err(f"remote should be either docker or process")
+            err(f"startby should be either docker or process")
             sys.exit(1)
 
         from ijcai2022nmmo import ProxyTeam
@@ -185,18 +186,16 @@ def rollout(submission_path: str, remote: Optional[str], registry: str):
     except:
         raise
     finally:
-        if remote:
+        if startby:
             team.stop()
 
 
 class Toolkit:
     def test(
         self,
-        remote: Optional[str] = None,
+        startby: Optional[str] = None,
         registry: str = "dockerhub",
     ):
-        self.check_aicrowd_json()
-
         submission = "my-submission"
         try:
             subm.check(submission)
@@ -208,7 +207,7 @@ class Toolkit:
 
         from art import text2art
         try:
-            rollout(submission, remote, registry)
+            rollout(submission, startby, registry)
         except:
             traceback.print_exc()
             err(text2art("TEST FAIL", "sub-zero"))
@@ -294,6 +293,39 @@ class Toolkit:
             err(f'[authors] in aicrowd.json should be set as aicrowd username(s). Like ["tomz", "maryz"]'
                 )
             sys.exit(4)
+
+    def aicrowd_setup(self):
+        c = CLIConfig()
+        c.load(None)
+        if not c.get("aicrowd_api_key"):
+            warn("AICrowd config not found. Trying ``aicrowd login``.")
+            r = subprocess.run("aicrowd login",
+                               shell=True,
+                               capture_output=False)
+            if r.returncode:
+                err("aicrowd_setup failed.")
+        ok("aicrowd_setup done.")
+
+    def submit(
+        self,
+        submission_id,
+        skip_test: bool = False,
+        startby: Optional[str] = None,
+        registry: str = "dockerhub",
+    ):
+        self.aicrowd_setup()
+
+        self.check_aicrowd_json()
+
+        if not skip_test:
+            self.test(startby, registry)
+
+        r = subprocess.run(f"bash .submit.sh '{submission_id}'",
+                           shell=True,
+                           capture_output=False)
+        if r.returncode:
+            err("bash .submit.sh failed.")
+            sys.exit(1)
 
 
 if __name__ == "__main__":
