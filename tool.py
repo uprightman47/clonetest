@@ -195,6 +195,9 @@ class Toolkit:
         startby: Optional[str] = None,
         registry: str = "dockerhub",
     ):
+        assert startby is None or isinstance(startby, str)
+        assert isinstance(registry, str)
+
         submission = "my-submission"
         try:
             subm.check(submission)
@@ -313,6 +316,10 @@ class Toolkit:
         startby: Optional[str] = None,
         registry: str = "dockerhub",
     ):
+        assert isinstance(skip_test, bool)
+        assert startby is None or isinstance(startby, str)
+        assert isinstance(registry, str)
+
         self.aicrowd_setup()
 
         self.check_aicrowd_json()
