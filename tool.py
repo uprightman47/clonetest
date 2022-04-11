@@ -190,6 +190,13 @@ class Toolkit:
         startby: str = "process",
         registry: str = "dockerhub",
     ):
+        r"""
+        Tests your submission in ``my-submission/`` by running rollout.
+
+        Args:
+            startby (Optional[str], optional): Defines how the submission code will be running. Options: ["docker", "process]
+            registry (str, optional): Defines where to pull the docker image. It has effect only when ``startby=docker``. Options: ["dockerhub", "tencentcloud"]
+        """
         assert isinstance(startby, str)
         assert isinstance(registry, str)
 
@@ -214,68 +221,6 @@ class Toolkit:
 
     def run_team_server(self, submission: str):
         run_team_server(submission)
-
-    def check_requirements(
-        self,
-        submission: str,
-        strict: bool = False,
-        default_packages_path: str = "docker/requirements.txt",
-    ):
-        if not os.path.exists(default_packages_path):
-            err(f"The default package list {default_packages_path} not exist")
-            sys.exit(1)
-
-        subm.check(submission)
-        with tempfile.TemporaryDirectory() as tmpdir:
-            subm_reqm_path = os.path.join(tmpdir, 'requirements.txt')
-            p = subprocess.Popen(
-                f"pipreqs --savepath {subm_reqm_path} {submission}",
-                shell=True)
-            ret = p.wait()
-            if ret:
-                err("Check requirements failed!")
-                sys.exit(2)
-
-            def _package(x: str) -> str:
-                return x.split("=")[0]
-
-            def _version(x: str) -> str:
-                return x.split("=")[-1]
-
-            def _read_requirements(path: str) -> List[str]:
-                with open(path, "r") as fp:
-                    requirements = fp.read().splitlines()
-                requirements = [
-                    reqm for reqm in requirements
-                    if reqm and not reqm.startswith("#")
-                ]
-                if not strict:
-                    requirements = [_package(x) for x in requirements]
-                return requirements
-
-            subm_requirements = _read_requirements(subm_reqm_path)
-            default_packages = _read_requirements(default_packages_path)
-            mapping = {_package(x): x for x in default_packages}
-
-            fault = False
-            for reqm in subm_requirements:
-                if reqm not in default_packages:
-                    fault = True
-                    if not strict:
-                        err(f"Package[{reqm}] is not in competition env")
-                    else:
-                        package = _package(reqm)
-                        if package in mapping:
-                            local_version = _version(reqm)
-                            competition_version = _version(mapping[package])
-                            warn(
-                                f"Package[{package}] version conflicts, local[{local_version}] vs competiton[{competition_version}]"
-                            )
-                        else:
-                            err(f"Package[{reqm}] is not in competition env")
-
-            if not fault:
-                ok("Check requirements passed! Good luck!")
 
     def check_aicrowd_json(self):
         with open("aicrowd.json", "r") as fp:
@@ -310,6 +255,9 @@ class Toolkit:
             fp.write(json.dumps(config, indent=4))
 
     def aicrowd_setup(self):
+        r"""
+        Setting up the AICrowd config.
+        """
         from aicrowd.contexts.config import CLIConfig
         c = CLIConfig()
         c.load(None)
@@ -329,6 +277,15 @@ class Toolkit:
         startby: str = "process",
         registry: str = "dockerhub",
     ):
+        r"""
+        Pushes your submission.
+
+        Args:
+            submission_id (str): Name of submission. Each submission must have a unique name.
+            skip_test (bool, optional): If it is set, there will be no test before pushing.
+            startby (Optional[str], optional): Defines how the submission code will be running. Options: ["docker", "process]
+            registry (str, optional): Defines where to pull the docker image. It has effect only when ``startby=docker``. Options: ["dockerhub", "tencentcloud"]
+        """
         assert isinstance(skip_test, bool)
         assert startby is None or isinstance(startby, str)
         assert isinstance(registry, str)
