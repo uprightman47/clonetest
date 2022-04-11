@@ -1,2 +1,2 @@
 https://github.com/IJCAI2022-NMMO/environment/archive/refs/tags/v1.5.3.17a3.1.tar.gz
-https://github.com/IJCAI2022-NMMO/ijcai2022nmmo/archive/refs/tags/v0.2.6.tar.gz
+https://github.com/IJCAI2022-NMMO/ijcai2022nmmo/archive/refs/tags/v0.2.7.tar.gz
