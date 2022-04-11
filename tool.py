@@ -292,9 +292,27 @@ class Toolkit:
             sys.exit(3)
 
         if not config.get("authors"):
-            err(f'[authors] in aicrowd.json should be set as aicrowd username(s). Like ["tomz", "maryz"]'
-                )
+            authors = []
+            warn(f"[authors] in aicrowd.json is empty")
+            ok(f"Enter the authors (seperated by comma(,)).")
+        else:
+            authors = config["authors"]
+            ok(f"Current authors are: {config['authors']}")
+            ok(f"Enter the authors (seperated by comma(,)). If no change to the authors, just press ENTER."
+               )
+
+        text = input(": ").strip()
+        if text:
+            authors = [x.strip().replace("'", "").replace('"', '') for x in text.split(",") if x.strip()]
+        if not authors:
+            err(f"authors are empty")
             sys.exit(4)
+
+        ok(f"Current authors are: {authors}")
+
+        config["authors"] = authors
+        with open("aicrowd.json", "w") as fp:
+            fp.write(json.dumps(config, indent=4))
 
     def aicrowd_setup(self):
         from aicrowd.contexts.config import CLIConfig
