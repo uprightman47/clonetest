@@ -146,30 +146,26 @@ def err(msg: str):
     print(termcolor.colored(msg, "red", attrs=['bold']))
 
 
-def rollout(submission_path: str, startby: Optional[str], registry: str):
+def rollout(submission_path: str, startby: str, registry: str):
     from ijcai2022nmmo import CompetitionConfig
 
     class Config(CompetitionConfig):
         PATH_MAPS = 'maps/medium/evaluation'
 
-    if startby:
-        if startby == "docker":
-            ok(f"Try run submission in docker container ...")
-            container_id = run_submission_in_docker(submission_path, registry)
-            ok(f"Submission is running in container {container_id}")
-        elif startby == "process":
-            ok(f"Try run submission in subprocess ...")
-            p = run_submission_in_process(submission_path)
-            ok(f"Submission is running in process {p.pid}")
-        else:
-            err(f"startby should be either docker or process")
-            sys.exit(1)
-
-        from ijcai2022nmmo import ProxyTeam
-        team = ProxyTeam("my-submission", Config(), "127.0.0.1", PORT)
+    if startby == "docker":
+        ok(f"Try run submission in docker container ...")
+        container_id = run_submission_in_docker(submission_path, registry)
+        ok(f"Submission is running in container {container_id}")
+    elif startby == "process":
+        ok(f"Try run submission in subprocess ...")
+        p = run_submission_in_process(submission_path)
+        ok(f"Submission is running in process {p.pid}")
     else:
-        team = subm.get_team_from_submission(submission_path, f"my-submission",
-                                             Config())
+        err(f"startby should be either docker or process")
+        sys.exit(1)
+
+    from ijcai2022nmmo import ProxyTeam
+    team = ProxyTeam("my-submission", Config(), "127.0.0.1", PORT)
 
     try:
         from ijcai2022nmmo import RollOut, scripted
@@ -185,17 +181,16 @@ def rollout(submission_path: str, startby: Optional[str], registry: str):
     except:
         raise
     finally:
-        if startby:
-            team.stop()
+        team.stop()
 
 
 class Toolkit:
     def test(
         self,
-        startby: Optional[str] = None,
+        startby: str = "process",
         registry: str = "dockerhub",
     ):
-        assert startby is None or isinstance(startby, str)
+        assert isinstance(startby, str)
         assert isinstance(registry, str)
 
         submission = "my-submission"
@@ -331,7 +326,7 @@ class Toolkit:
         self,
         submission_id,
         skip_test: bool = False,
-        startby: Optional[str] = None,
+        startby: str = "process",
         registry: str = "dockerhub",
     ):
         assert isinstance(skip_test, bool)
