@@ -205,7 +205,7 @@ For participants using windows, we strongly recommend you to install `wsl`.
 
 #### 5. How can I render/save replay locally?
 
-Please refer to [Neural MMO Environment Tutorial](https://www.aicrowd.com/showcase/neural-mmo-environment-tutorial) for an instruction about how to render locally.
+Please refer to [Neural MMO Environment Tutorial](https://www.aicrowd.com/challenges/ijcai-2022-the-neural-mmo-challenge/notebooks) for an instruction about how to render locally.
 
 #### 6. `Error: Pack Exceeds Maximum Allowed Size`?
 
