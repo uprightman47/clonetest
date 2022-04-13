@@ -39,10 +39,10 @@ In this challenge, you will train your models locally and then upload them to AI
 Clone this starter kit repository.
 
 ```bash
-git clone http://gitlab.aicrowd.com/henryz/ijcai2022-nmmo-starter-kit-test0412.git
+git clone http://gitlab.aicrowd.com/neural-mmo/ijcai2022-nmmo-starter-kit.git
 conda create -n ijcai2022-nmmo python==3.9
 conda activate ijcai2022-nmmo
-cd ./ijcai2022-nmmo-starter-kit-test0412
+cd ./ijcai2022-nmmo-starter-kit
 ```
 
 Install necessary dependencies, `git-lfs` is for submitting large files by git (use `brew` for mac users) and `ijcai2022nmmo` is a Neural MMO environment wrapper prepared for IJCAI 2022 Competition.
