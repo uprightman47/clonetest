@@ -1,2 +1,2 @@
-nmmo==1.5.3.17a4
+https://github.com/IJCAI2022-NMMO/environment/archive/refs/tags/v1.5.3.17a4.2.tar.gz
 https://gitlab.aicrowd.com/henryz/ijcai2022nmmo/-/archive/v0.2.8/ijcai2022nmmo-v0.2.8.tar.gz
