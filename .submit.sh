@@ -77,7 +77,7 @@ setup_commits() {
   git tag -am "submission-$TAG" "submission-$TAG" || (log_error "There is another submission with the same description. Please give a different description." && exit 1)
   git push -f $REMOTE main
   git push -f $REMOTE "submission-$TAG"
-  log_success "Check the submission progress in your repository: $(get_submission_remote_url | awk -F'@' '{print $NF}' | sed 's|\.git||g' | sed 's|\.com:|\.com/|g')/issues"
+  log_success "Check the submission progress in your repository: https://$(get_submission_remote_url | awk -F'@' '{print $NF}' | sed 's|\.git||g' | sed 's|\.com:|\.com/|g')/issues"
 }
 
 check_cli_install() {
