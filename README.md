@@ -1,4 +1,4 @@
-![ijcai2022nmmo-banner](https://www.linkpicture.com/q/NMMO赛事KV-1200x628.jpg)
+![ijcai2022nmmo-banner](https://i.ibb.co/9pPdQT6/NMMO-KV-LOGO.jpg )
 
 # Table of contents
 - [Competition procedure](#competition-procedure)
