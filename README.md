@@ -1,4 +1,4 @@
-![ijcai2022nmmo-banner](https://i.ibb.co/9pPdQT6/NMMO-KV-LOGO.jpg )
+![ijcai2022nmmo-banner](https://www.linkpicture.com/q/NMMO赛事KV-LOGO_1.jpg)
 
 # Table of contents
 - [Competition procedure](#competition-procedure)
@@ -49,7 +49,7 @@ Install necessary dependencies, `git-lfs` is for submitting large files by git (
 
 ```
 apt install git-lfs
-pip install git+https://github.com/IJCAI2022-NMMO/ijcai2022nmmo.git
+pip install git+http://gitlab.aicrowd.com/henryz/ijcai2022nmmo.git
 pip install -r requirements_tool.txt
 ```
 
@@ -83,11 +83,11 @@ The default runtime is provided in `submission-runtime/`. We also accept submiss
 Here is an example of submission:
 ```python
 from nmmo.io import action
-
 from ijcai2022nmmo import Team
 
 class YourTeam(Team):
     def __init__(self, team_id: str, config=None, **kwargs):
+        super().__init__(team_id, config)
 
     def act(self, observations):
         actions = {}
@@ -192,22 +192,22 @@ During evaluation, your submission will be allocated with **1 CPU core and 1G me
 
 Your submission should not be larger than 300MB.
 
-#### 4. How can I speed up docker image pull?
+#### 3. How can I speed up docker image pull?
 
 For participants in China, you can pull image from tencentcloud
 ```bash
 python tool.py submit <unique-submission-name> --startby=docker --registry=tencentcloud
 ```
 
-#### 5. How do windows users participate the competition?
+#### 4. How do windows users participate the competition?
 
 For participants using windows, we strongly recommend you to install `wsl`.
 
-#### 6. How can I render/save replay locally?
+#### 5. How can I render/save replay locally?
 
 Please refer to [Neural MMO Environment Tutorial](https://www.aicrowd.com/showcase/neural-mmo-environment-tutorial) for an instruction about how to render locally.
 
-#### 5. `Error: Pack Exceeds Maximum Allowed Size`?
+#### 6. `Error: Pack Exceeds Maximum Allowed Size`?
 
 Try dividing your whole commit into multiple smaller commits.
 
