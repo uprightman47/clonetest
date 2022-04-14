@@ -203,7 +203,7 @@ def check_repo_size() -> bool:
         return True
     if size > MAX_REPO_SIZE:
         warn(f"Current repo size: {MAX_REPO_SIZE}MB")
-        err(f"Try make your repo size (.git doesn't count) smaller than 500MB."
+        err(f"Please try making your repo size (.git doesn't count) smaller than 500MB."
             )
         return False
     else:
