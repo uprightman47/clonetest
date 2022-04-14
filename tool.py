@@ -149,7 +149,7 @@ def rollout(submission_path: str, startby: str, registry: str):
     from ijcai2022nmmo import CompetitionConfig
 
     class Config(CompetitionConfig):
-        PATH_MAPS = 'maps/medium/evaluation'
+        NMAPS = 1
 
     if startby == "docker":
         ok(f"Try run submission in docker container ...")
