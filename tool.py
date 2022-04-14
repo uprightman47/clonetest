@@ -5,14 +5,12 @@ import os
 import sys
 import time
 import json
-import tempfile
 import traceback
 import termcolor
 import threading
 import subprocess
 import multiprocessing as mp
 from subprocess import CalledProcessError
-from typing import List, Optional
 from pathlib import Path
 
 from ijcai2022nmmo import submission as subm
@@ -21,6 +19,7 @@ IMAGE = "ijcai2022nmmo/submission-runtime"
 CONTAINER = "ijcai2022-nmmo-runner"
 PORT = 12343
 TENCENTCLOUD_REGISTRY = "ccr.ccs.tencentyun.com"
+MAX_REPO_SIZE = 500
 
 
 def run_team_server(submission_path: str):
@@ -184,6 +183,34 @@ def rollout(submission_path: str, startby: str, registry: str):
         team.stop()
 
 
+def check_repo_size() -> bool:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    try:
+        import platform
+        system = platform.system()
+        if system == "Darwin":
+            r = subprocess.run(f"du -sm -I .git {current_dir}",
+                               shell=True,
+                               capture_output=True)
+        else:
+            r = subprocess.run(f"du -sm --exclude=.git {current_dir}",
+                               shell=True,
+                               capture_output=True)
+        out = r.stdout.decode().strip()
+        size = int(out.split()[0])
+    except Exception as e:
+        warn(f"Get repo size failed -- {e}")
+        return True
+    if size > MAX_REPO_SIZE:
+        warn(f"Current repo size: {MAX_REPO_SIZE}MB")
+        err(f"Try make your repo size (.git doesn't count) smaller than 500MB."
+            )
+        return False
+    else:
+        ok(f"Current repo size: {MAX_REPO_SIZE}MB")
+    return True
+
+
 class Toolkit:
     def test(
         self,
@@ -243,7 +270,10 @@ class Toolkit:
 
         text = input(": ").strip()
         if text:
-            authors = [x.strip().replace("'", "").replace('"', '') for x in text.split(",") if x.strip()]
+            authors = [
+                x.strip().replace("'", "").replace('"', '')
+                for x in text.split(",") if x.strip()
+            ]
         if not authors:
             err(f"authors are empty")
             sys.exit(4)
@@ -289,6 +319,10 @@ class Toolkit:
         assert isinstance(skip_test, bool)
         assert startby is None or isinstance(startby, str)
         assert isinstance(registry, str)
+
+        if not check_repo_size():
+            err("check_repo_size failed.")
+            sys.exit(1)
 
         self.aicrowd_setup()
 
