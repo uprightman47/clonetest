@@ -35,6 +35,8 @@ def run_submission_in_process(submission_path) -> mp.Process:
     mp.set_start_method("fork", force=True)
 
     def run_server():
+        os.environ["MKL_NUM_THREADS"] = "1"
+        os.environ["OMP_NUM_THREADS"] = "1"
         run_team_server(submission_path)
 
     p = mp.Process(target=run_server, daemon=True)
