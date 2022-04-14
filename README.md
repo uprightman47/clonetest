@@ -190,7 +190,7 @@ During evaluation, your submission will be allocated with **1 CPU core and 1G me
 
 #### 2. Are there any file size limit for submission?
 
-Your submission should not be larger than 300MB.
+Your submission should not be larger than 500MB.
 
 #### 3. How can I speed up docker image pull?
 
