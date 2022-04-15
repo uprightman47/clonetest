@@ -110,10 +110,10 @@ def run_submission_in_docker(submission_path, registry):
     if _shell(f'docker ps -a | grep -w "{CONTAINER}"') != "":
         _shell(f"docker stop {CONTAINER}")
         _shell(f"docker rm {CONTAINER}")
-    cwd = Path(__file__).parent.resolve().as_posix()
+    # cwd = Path(__file__).parent.resolve().as_posix()
     command = f"python tool.py run_team_server --submission={submission_path}"
     container_id = _shell(
-        f"docker run -it -d --name {CONTAINER} -v {cwd}:/home/aicrowd -p {PORT}:{PORT} {IMAGE}:local {command}"
+        f"docker run -it -d --name {CONTAINER} -p {PORT}:{PORT} {IMAGE}:local {command}"
     )
 
     threading.Thread(target=_shell,
