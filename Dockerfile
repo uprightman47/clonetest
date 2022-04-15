@@ -8,5 +8,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # DO NOT MODIFY
 WORKDIR /home/aicrowd
-copy tool.py tool.py
+COPY tool.py tool.py
 COPY my-submission my-submission
