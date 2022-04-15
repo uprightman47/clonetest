@@ -7,18 +7,19 @@
     * [Make your first submission](#make-your-first-submission)
 - [Submit your own agents](#submit-your-own-agents)
     * [Repository structure](#1-repository-structure)
-    * [Custom runtime configuration](#2-custome-runtime-configuration)
+    * [Custom runtime configuration](#2-custom-runtime-configuration)
     * [Implement `submission.py`](#3-implement-submissionpy)
     * [Submit](#4-submit)
 - [Baseline](#baselines)
 - [Local Evaluation](#local-evaluation)
+- [FAQ](#faq)
 - [Important links](#important-links)
 - [Contributors](#contributors)
 
 
 # Competition procedure
 
-The Neural MMO Challenge is an opportunity for researchers and machine learning enthusiasts to test their skills by designing and building agents that can survive and thrive together in a massively multiagent environment full of potential adversaries.
+The Neural MMO Challenge is an opportunity for researchers and machine learning enthusiasts to test their skills by designing and building agents that can survive and thrive together in a massively multi-agent environment full of potential adversaries.
 
 In this challenge, you will train your models locally and then upload them to AIcrowd (via git) to be evaluated.
 
@@ -65,18 +66,22 @@ check your rank on [Leaderboard](https://www.aicrowd.com/challenges/ijcai-2022-t
 
 ### 1. Repository structure
 
+<span style="color:red">Make sure you have put all the files and models required for submission under the `my-submission/` directory. If you put your files elsewhere, the evaluation will fail.</span>
+
 ```
 - my-submission/            # Directory containing your submission.
+    | - other_files         # All others files needed by your submission.
     | - submission.py       # Entrypoint of your submission.
 - submission-runtime        # Directory containing default Dockerfile and requirements.txt. 
-- Dokcerfile                # Dockerfile for your submission. 
+- Dockerfile                # Dockerfile for your submission. 
 - requirements.txt          # Python requirements for your submission.
-- .submit.sh                # Hepler script for submit.
-- tool.py                   # Hepler script for validate locally and submit.
+- .submit.sh                # Helper script for submit.
+- tool.py                   # Helper script for validate locally and submit.
 - aicrowd.json              # Json for submit.
 ```
-### 2. Custome runtime configuration
-The default runtime is provided in `submission-runtime/`. We also accept submissions with custom runtimes. The configuration files include `requirements.txt` and `Dockerfile`.
+
+### 2. Custom runtime configuration
+The default runtime is provided in `submission-runtime/`. We also accept submissions with custom runtime. The configuration files include `requirements.txt` and `Dockerfile`.
 
 ### 3. Implement `submission.py`
 
@@ -117,24 +122,6 @@ python tool.py test
 python tool.py submit <unique-submission-name>
 ```
 
-<!-- The `startby` parameter determines how to validate your submission locally
--  `--startby=process`: check your submission in *process* mode.
--  `--startby=docker`: check your submission in *docker* mode. -->
-
-<!-- We strongly recommend that you use *docker* mode to validate your submission, as this is the mode used on the competition server. -->
-
-Note that if your submission passes the local test but fail to submit, it is most likely that the local enviornment does not match the `dockerfile`. Please test and submit in *docker* mode.
-
-```bash
-python tool.py test --startby=docker
-```
-
-or
-
-```bash
-python tool.py submit <unique-submission-name> --startby=docker
-```
-
 If you can see the following output, congratulations! Now you can check your submission.
 
 ``` bash
@@ -154,6 +141,17 @@ If you can see the following output, congratulations! Now you can check your sub
             /////////////////
                ///////////
 ```
+<!-- The `startby` parameter determines how to validate your submission locally
+-  `--startby=process`: check your submission in *process* mode.
+-  `--startby=docker`: check your submission in *docker* mode. -->
+
+<span style="color:red">If you pass local validation, but get "failed" status in online submission list, it is most likely that your local running environment is different from the competition server. On server, your submission is evaluated in a container. To test your repo in exactly same environment as server, add `--startby=docker` option when testing.</span>
+
+```bash
+python tool.py test --startby=docker
+python tool.py submit <unique-submission-name> --startby=docker
+```
+
 # Baselines
 
 We provide a variety of baseline agents, please refer to [ijcai2022-nmmo-baselines](https://gitlab.aicrowd.com/neural-mmo/ijcai2022-nmmo-baselines) repository.
@@ -171,7 +169,7 @@ class YourTeam(Team):
         return actions
 
 
-def local_evalution():
+def local_evaluation():
     config = CompetitionConfig()
     your_team = YourTeam(team_id="my_team", env_config=config)
     all_teams = [scripted.CombatTeam(f"combat-{i}", config) for i in range(3)] + \
@@ -226,7 +224,7 @@ Try dividing your whole commit into multiple smaller commits.
 - Neural MMO resources
     * [Neural MMO documentation](https://neuralmmo.github.io/build/html/rst/landing.html)
     * [Neural MMO GitHub repository](https://github.com/NeuralMMO/environment/tree/ijcai-competition)
-    * [Neural MMO Environment Tutorial](https://www.aicrowd.com/showcase/neural-mmo-environment-tutorial)
+    * [Neural MMO Environment Tutorial](https://www.aicrowd.com/challenges/ijcai-2022-the-neural-mmo-challenge/notebooks)
     
 
 # Contributors
