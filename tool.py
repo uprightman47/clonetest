@@ -322,6 +322,8 @@ class Toolkit:
         assert startby is None or isinstance(startby, str)
         assert isinstance(registry, str)
 
+        warn(f"Please make sure putting all your submission related (code, model, ...) in the my-submission folder.")
+
         if not check_repo_size():
             err("check_repo_size failed.")
             sys.exit(1)
