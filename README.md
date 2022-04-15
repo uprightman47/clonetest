@@ -66,7 +66,7 @@ check your rank on [Leaderboard](https://www.aicrowd.com/challenges/ijcai-2022-t
 
 ### 1. Repository structure
 
-<span style="color:red">Make sure you have put all the files and models required for submission under the `my-submission/` directory. If you put your files elsewhere, the evaluation will fail.</span>
+<span style="color:red">**Make sure you have put all the files and models required for submission under the `my-submission/` directory. If you put your files elsewhere, the evaluation will fail.**</span>
 
 ```
 - my-submission/            # Directory containing your submission.
@@ -145,7 +145,7 @@ If you can see the following output, congratulations! Now you can check your sub
 -  `--startby=process`: check your submission in *process* mode.
 -  `--startby=docker`: check your submission in *docker* mode. -->
 
-<span style="color:red">If you pass local validation, but get "failed" status in online submission list, it is most likely that your local running environment is different from the competition server. On server, your submission is evaluated in a container. To test your repo in exactly same environment as server, add `--startby=docker` option when testing.</span>
+<span style="color:red">**If you pass local validation, but get "failed" status in online submission list, it is most likely that your local running environment is different from the competition server. On server, your submission is evaluated in a container. To test your repo in exactly same environment as server, add `--startby=docker` option when testing.**</span>
 
 ```bash
 python tool.py test --startby=docker
